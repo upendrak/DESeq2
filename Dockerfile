@@ -20,3 +20,9 @@ RUN chmod +x /run_DESeq2.R && cp /run_DESeq2.R /usr/bin
 ENTRYPOINT ["run_DESeq2.R"]
 CMD ["-h"]
 
+# Building and testing
+# sudo docker build -t"=ubuntu/deseq2" .
+# Running with out any arguments
+# sudo docker run ubuntu/deseq2 -h
+# With test data
+# sudo docker run --rm -v $(pwd):/working-dir -w /working-dir ubuntu/deseq2 -i DESeq_test_data.tsv -n 1 -c untreated,untreated,untreated,untreated,treated,treated,treated -l single-end,single-end,paired-end,paired-end,single-end,paired-end,paired-end -p untreated,treated -f 0.1 -x 0.4
