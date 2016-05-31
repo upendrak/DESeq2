@@ -1,4 +1,4 @@
-#!/usr/local2/R-3.0.2/R-3.0.2/bin/Rscript
+#!/usr/bin/Rscript
 
 ## Example command line invocation:
 ## "./Rscript.exe" "./run_DESeq2.R" --input "./DESeq_test_data.tsv" --namecol 1 --condition "untreated,untreated,untreated,untreated,treated,treated,treated" --libType "single-end,single-end,paired-end,paired-end,single-end,paired-end,paired-end" --pair "untreated,treated" --fdr 0.1 --filter 0.4
@@ -12,16 +12,7 @@
 ## FBgn0000015	0	2	1	2	1	0	0
 ## FBgn0000017	4664	8714	3564	3150	6205	3072	3334
 
-# Auto-set up dependencies
-# This is for API deployment
-#
-.libPaths(getwd())
-install.packages("getopt", repos="http://lib.stat.cmu.edu/R/CRAN", lib=getwd())
-install.packages("gplots", repos="http://lib.stat.cmu.edu/R/CRAN", lib=getwd())
-source("http://bioconductor.org/biocLite.R")
-biocLite("DESeq2", destdir=getwd(), lib=getwd())
-.libPaths(getwd())
-
+# Install dependencies
 library("getopt")
 library("DESeq2")
 library("RColorBrewer")
@@ -48,7 +39,7 @@ options<-matrix(c('input',	'i',	1,	"character",
 		  'filter',	'x',	1,	"double",
 		  'mtc',	'm',	0,	"character",
 		  'help', 	'h',    0,      "logical"),
-		   ncol=4,byrow=TRUE)
+		  ncol=4,byrow=TRUE)
 
 ret.opts<-getopt(options,args)
 
@@ -249,8 +240,7 @@ dev.off()
 ## Filter for significant genes, according to
 ## a user-supplied False Discovery Rate.
 ##
-resFullSig = resFull[!is.na(resFull$padj) < minFDR,]
-
+resFullSig = subset(resFull, resFull$padj < minFDR)
 ##
 ## List the most signicantly differentially expressed
 ## genes, as well as the most strongly down-regulated
