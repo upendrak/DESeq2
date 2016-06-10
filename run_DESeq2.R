@@ -208,21 +208,25 @@ if(replicates != "none"){
 ## counts (irrespective of biological condition), and
 ## remove the genes in a user-supplied lower quantile.
 ##
-rs = rowSums(counts(cdsFull))
-use = (rs > quantile(rs, probs=filter))
-table(use)
-cdsFilt = cdsFull[use,]
-stopifnot(!any(is.na(use)))
-
 
 ###########################################################
 ## Section 3: Inference: Calling differential expression ##
 ###########################################################
-
-cdsFull<-nbinomWaldTest(cdsFull);
-dds<-DESeq(cdsFull)
-resFull<-results(dds)
-head(resFull)
+rs = rowSums(counts(cdsFull))
+if(!is.null(ret.opts$filter)){
+  use = (rs > quantile(rs, probs=filter))
+  cdsFull = cdsFull[use,]
+  stopifnot(!any(is.na(use)))
+  cdsFull<-nbinomWaldTest(cdsFull);
+  dds<-DESeq(cdsFull)
+  resFull<-results(dds)
+  head(resFull)
+}else {
+  cdsFull<-nbinomWaldTest(cdsFull);
+  dds<-DESeq(cdsFull)
+  resFull<-results(dds)
+  head(resFull)
+}
 
 ## Plot the log2 fold changes against the mean
 ## normalised counts, coloring in red those
